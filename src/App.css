@@ -1,0 +1,48 @@
+.MuiTabs-flexContainer {
+    justify-content: space-around;
+}
+
+.tabPanel {
+    display: flex;
+    justify-content: center;
+    margin-top:3%;
+}
+
+.gridActions *{
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.formTextField {
+    width:500px;
+    margin-bottom: 20px;
+}
+
+.MuiSelect-select,.MuiSelect-select:focus{
+    background-color: #ffffff !important;
+}
+
+.MuiFormControl-root{
+    width: 100%;
+}
+
+.displayFlex {
+    display: flex;
+    justify-content: space-between;
+}
+
+.fieldsContainer{
+    margin-top:40px; 
+    margin-bottom: 10px;
+}
+
+.fieldsContainer div{
+    width:250px;
+}
+
+.statusButton{
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    padding:0px !important;
+    margin-top: -10px !important;
+}
