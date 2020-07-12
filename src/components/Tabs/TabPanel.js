@@ -1,5 +1,5 @@
 import Box from '@material-ui/core/Box';
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import GridService from '../Service/GridService';
@@ -12,7 +12,11 @@ function TabPanel(props) {
   const { children, value, index, ...other } = props;
   const [groupBy,setGroupBy] = React.useState('none')
 
-  
+  useEffect(() => {
+    if(groupBy && groupBy !== 'none'){
+      GridService.setGroupBy(groupBy);
+    }
+  })
 const handleChange = (event)=> {
   setGroupBy(event.target.value);
   GridService.setGroupBy(event.target.value);

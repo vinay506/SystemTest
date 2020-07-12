@@ -39,15 +39,16 @@ const AgGrid = (props) => {
     }
 
     const updateGrid = (params) => {
-        if(props.currentTab !== 'All'){
+        if (props.currentTab !== 'All') {
             gridApi.updateRowData({
                 remove: [params.data]
             })
         }
-        
+
     }
 
     const getButtonText = (params) => {
+        if(!params || !params.data) return 'Open';
         return params.data.currentState === 'Open' ? 'Done' : 'Open';
     }
 
@@ -110,34 +111,40 @@ const AgGrid = (props) => {
         }
     }
     const [rowData, setRowData] = useState(getFilteredRowData());
+    const [rerender,setRerender] = useState(false);
 
     useEffect(() => {
         GridService.gridData().subscribe(response => {
-            switch (response.action) {
-                case 'UPDATE':
-                    gridApi.updateRowData({
-                        update: [response.data]
-                    })
-                    ModalService.setNotificationVisibility(true, 'ALERT', 'UPDATE');
-                    break;
-                case 'ADD':
-                    gridApi.updateRowData({
-                        add: [response.data]
-                    })
-                    ModalService.setNotificationVisibility(true, 'ALERT', 'ADD');
-                    break;
-                case 'DELETE':
-                    gridApi.updateRowData({
-                        remove: [response.data]
-                    });
-                    ModalService.setNotificationVisibility(true, 'ALERT', 'DELETE');
+            if (gridApi) {
+                switch (response.action) {
+                    case 'UPDATE':
+                        gridApi.updateRowData({
+                            update: [response.data]
+                        })
+                        ModalService.setNotificationVisibility(true, 'ALERT', 'UPDATE');
+                        break;
+                    case 'ADD':
+                        gridApi.updateRowData({
+                            add: [response.data]
+                        })
+                        ModalService.setNotificationVisibility(true, 'ALERT', 'ADD');
+                        break;
+                    case 'DELETE':
+                        gridApi.updateRowData({
+                            remove: [response.data]
+                        });
+                        ModalService.setNotificationVisibility(true, 'ALERT', 'DELETE');
+                }
             }
+
         });
         GridService.observsSearchKey().subscribe(response => {
-            if(response){
-                gridApi.setQuickFilter(response)
-            }else{
-                gridApi.setQuickFilter('')
+            if (gridApi) {
+                if (response) {
+                    gridApi.setQuickFilter(response)
+                } else {
+                    gridApi.setQuickFilter('')
+                }
             }
         })
         GridService.getGroupBy().subscribe(response => {
@@ -152,6 +159,10 @@ const AgGrid = (props) => {
                 return obj
             });
             setcolumnDefs(defs);
+            setRerender(true);
+            setTimeout(() =>{
+                setRerender(false);
+            },5)
         })
     });
 
@@ -162,7 +173,7 @@ const AgGrid = (props) => {
     }
 
     const getRowStyleScheduled = (params) => {
-        if (params.data.currentState === 'Done') {
+        if (params && params.data &&  params.data.currentState === 'Done') {
             return {
                 'background-color': '#32CD32'
             }
@@ -185,7 +196,7 @@ const AgGrid = (props) => {
 
     return (
         <div className="ag-theme-alpine" style={{ height: '500px', width: '1220px' }}>
-            <AgGridReact
+            {!rerender && <AgGridReact 
                 modules={modules}
                 onGridReady={params => onGridReady(params)}
                 columnDefs={columnDefs}
@@ -196,7 +207,7 @@ const AgGrid = (props) => {
                 getRowStyle={getRowStyleScheduled}
                 enableCellChangeFlash={true}
             >
-            </AgGridReact>
+            </AgGridReact>}
         </div>
     );
 }
