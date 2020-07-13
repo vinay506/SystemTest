@@ -13,9 +13,7 @@ function TabPanel(props) {
   const [groupBy,setGroupBy] = React.useState('none')
 
   useEffect(() => {
-    if(groupBy && groupBy !== 'none'){
-      GridService.setGroupBy(groupBy);
-    }
+    setGroupBy('none')
   })
 const handleChange = (event)=> {
   setGroupBy(event.target.value);
