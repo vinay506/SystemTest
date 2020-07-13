@@ -53,7 +53,15 @@ export default function ModalComponent() {
   };
 
   const getTitle = () => {
-    return actionType === 'ADD' ? 'Add Todo' : 'Edit Todo';
+    switch(actionType){
+      case 'ADD':
+        return 'Add Todo';
+      case 'EDIT':
+        return 'Edit Todo';
+      case 'VIEW':
+        return 'VIEW Todo'
+    }
+
   }
 
   const handleChange = (event) => {
